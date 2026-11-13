@@ -67,3 +67,29 @@ class Vacinacao(Atendimento):
 
     def duracao_minutos(self) -> int:
         return 10 * self.doses
+
+"""Agenda"""
+
+class Agenda:
+    def __init__(self, limite_minutos: int = 240) -> None:
+        self._limite_minutos: int = limite_minutos
+        self._atendimentos: List[Atendimento] = []
+        
+    @property
+    def atendimentos(self) -> List[Atendimento]:
+        return list(self._atendimentos)
+    
+    @property
+    def minutos_ocupados(self) -> int:
+        return sum(atendimento.duracao_minutos() for atendimento in self._atendimentos)
+    
+    def agendar(self, atendimento: Atendimento) -> None:
+        for a in self._atendimentos:
+            if a.paciente == atendimento.paciente:
+                raise PacienteJaAgendadoError()
+            
+        nova_duracao = atendimento.duracao_minutos()
+        if (self.minutos_ocupados + nova_duracao) > self._limite_minutos:
+            raise HorarioIndisponivelError()
+
+        self._atendimentos.append(atendimento)

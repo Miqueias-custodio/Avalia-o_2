@@ -68,7 +68,7 @@ class Vacinacao(Atendimento):
     def duracao_minutos(self) -> int:
         return 10 * self.doses
 
-"""Agenda"""
+"""Schedule"""
 
 class Agenda:
     def __init__(self, limite_minutos: int = 240) -> None:
